@@ -1,7 +1,6 @@
 import type { GetKakaoUserProfileRequestDto } from './getKakaoUserProfile.dto';
 
-export interface GetNaverUserProfileRequestDto
-  extends GetKakaoUserProfileRequestDto {}
+export type GetNaverUserProfileRequestDto = GetKakaoUserProfileRequestDto;
 
 export interface GetNaverUserProfileResponseDto {
   resultcode: string;
