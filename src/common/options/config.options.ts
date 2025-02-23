@@ -7,6 +7,7 @@ export const appConfig = registerAs('app', () => ({
   kakaoClientSecret: process.env.KAKAO_CLIENT_SECRET,
   naverClientId: process.env.NAVER_CLIENT_ID,
   naverClientSecret: process.env.NAVER_CLIENT_SECRET,
+  googleApplicationCredentials: process.env.GOOGLE_APPLICATION_CREDENTIALS,
 }));
 
 export const configModuleOptions: ConfigModuleOptions = {
@@ -23,6 +24,8 @@ export const configModuleOptions: ConfigModuleOptions = {
 
     NAVER_CLIENT_ID: Joi.string().required(),
     NAVER_CLIENT_SECRET: Joi.string().required(),
+
+    GOOGLE_APPLICATION_CREDENTIALS: Joi.string().required(),
   }),
   load: [appConfig],
 };
