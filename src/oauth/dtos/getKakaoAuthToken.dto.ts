@@ -1,5 +1,6 @@
 export interface GetKakaoAuthTokenRequestDto {
   code: string;
+  redirectUri: string;
 }
 
 export interface GetKakaoAuthTokenResponseDto {

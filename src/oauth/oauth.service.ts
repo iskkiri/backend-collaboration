@@ -26,16 +26,16 @@ export class OauthService {
     private config: ConfigType<typeof appConfig>
   ) {}
 
-  async getKakaoAuthToken({ code }: GetKakaoAuthTokenRequestDto) {
+  async getKakaoAuthToken({ code, redirectUri }: GetKakaoAuthTokenRequestDto) {
     const { data } = await axios<GetKakaoAuthTokenResponseDto>({
       url: 'https://kauth.kakao.com/oauth/token',
       method: 'POST',
       data: {
         grant_type: 'authorization_code',
         client_id: this.config.kakaoClientId,
-        redirect_uri: 'http://localhost:3000/oauth/callback/kakao',
-        code,
         client_secret: this.config.kakaoClientSecret,
+        code,
+        redirect_uri: redirectUri,
       },
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
