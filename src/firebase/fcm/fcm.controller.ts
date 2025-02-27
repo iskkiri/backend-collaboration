@@ -33,6 +33,18 @@ export class FcmController {
         title,
         message,
       },
+      // iOS의 경우 notification이 없으면 메시지가 전송되지 않음
+      apns: {
+        payload: {
+          aps: {
+            contentAvailable: true,
+            alert: {
+              title: '터미타임',
+              body: '여기에 공지사항 제목',
+            },
+          },
+        },
+      },
     });
   }
 
@@ -47,6 +59,11 @@ export class FcmController {
         title,
         message,
       },
+      // iOS는 notification으로만 보내야 하는가?
+      notification: {
+        title,
+        body: message,
+      },
     });
   }
 
@@ -60,6 +77,18 @@ export class FcmController {
       data: {
         title,
         message,
+      },
+      // iOS의 경우 notification이 없으면 메시지가 전송되지 않음
+      apns: {
+        payload: {
+          aps: {
+            contentAvailable: true,
+            alert: {
+              title: '터미타임',
+              body: '여기에 공지사항 제목',
+            },
+          },
+        },
       },
     });
   }
