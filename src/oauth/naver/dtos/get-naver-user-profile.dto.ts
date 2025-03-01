@@ -1,4 +1,4 @@
-import type { GetKakaoUserProfileRequestDto } from './getKakaoUserProfile.dto';
+import type { GetKakaoUserProfileRequestDto } from '../../kakao/dtos/get-kakao-user-profile.dto';
 
 export type GetNaverUserProfileRequestDto = GetKakaoUserProfileRequestDto;
 

@@ -1,19 +1,23 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { OauthService } from './oauth.service';
-import type { GetKakaoUserProfileRequestDto } from './dtos/getKakaoUserProfile.dto';
-import type { GetNaverUserProfileRequestDto } from './dtos/getNaverUserProfile.dto';
+import { GetKakaoAuthTokenRequestDto } from './kakao/dtos/get-kakao-auth-token.dto';
+import { OAuthKakaoService } from './kakao/oauth-kakao.service';
+import { OAuthNaverService } from './naver/oauth-naver.service';
+import { GetNaverAuthTokenRequestDto } from './naver/dtos/get-naver-auth-token.dto';
 
 @Controller('oauth')
 export class OauthController {
-  constructor(private readonly oauthService: OauthService) {}
+  constructor(
+    private readonly oauthKakaoService: OAuthKakaoService,
+    private readonly oauthNaverService: OAuthNaverService
+  ) {}
 
   @Post('kakao')
-  kakaoLoginForMobileApp(@Body() body: GetKakaoUserProfileRequestDto) {
-    return this.oauthService.getKakaoUserProfile(body);
+  kakaoLogin(@Body() body: GetKakaoAuthTokenRequestDto) {
+    return this.oauthKakaoService.kakaoLogin(body);
   }
 
   @Post('naver')
-  naverLoginForMobileApp(@Body() body: GetNaverUserProfileRequestDto) {
-    return this.oauthService.getNaverUserProfile(body);
+  naverLogin(@Body() body: GetNaverAuthTokenRequestDto) {
+    return this.oauthNaverService.naverLogin(body);
   }
 }
