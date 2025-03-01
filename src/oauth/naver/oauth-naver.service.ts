@@ -18,6 +18,9 @@ export class OAuthNaverService {
     private config: ConfigType<typeof appConfig>
   ) {}
 
+  /**
+   * 네이버 로그인 (Authorization Code Flow)
+   */
   async naverLogin({ code, state }: GetNaverAuthTokenRequestDto) {
     const { access_token } = await this.getNaverAuthToken({
       code,
@@ -31,6 +34,9 @@ export class OAuthNaverService {
     return userProfile;
   }
 
+  /**
+   * 네이버 인증 토큰 가져오기
+   */
   private async getNaverAuthToken({ code, state }: GetNaverAuthTokenRequestDto) {
     const { data } = await axios<GetNaverAuthTokenResponseDto>({
       url: 'https://nid.naver.com/oauth2.0/token',
@@ -46,6 +52,9 @@ export class OAuthNaverService {
     return data;
   }
 
+  /**
+   * 네이버 사용자 정보 가져오기
+   */
   private async getNaverUserProfile({ accessToken }: GetNaverUserInfoRequestDto) {
     const { data } = await axios<GetNaverUserInfoResponseDto>({
       url: 'https://openapi.naver.com/v1/nid/me',
