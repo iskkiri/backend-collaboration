@@ -7,9 +7,9 @@ import type {
   GetNaverAuthTokenResponseDto,
 } from './dtos/get-naver-auth-token.dto';
 import type {
-  GetNaverUserProfileRequestDto,
-  GetNaverUserProfileResponseDto,
-} from './dtos/get-naver-user-profile.dto';
+  GetNaverUserInfoRequestDto,
+  GetNaverUserInfoResponseDto,
+} from './dtos/get-naver-user-info.dto';
 
 @Injectable()
 export class OAuthNaverService {
@@ -31,10 +31,7 @@ export class OAuthNaverService {
     return userProfile;
   }
 
-  private async getNaverAuthToken({
-    code,
-    state,
-  }: GetNaverAuthTokenRequestDto) {
+  private async getNaverAuthToken({ code, state }: GetNaverAuthTokenRequestDto) {
     const { data } = await axios<GetNaverAuthTokenResponseDto>({
       url: 'https://nid.naver.com/oauth2.0/token',
       method: 'GET',
@@ -49,10 +46,8 @@ export class OAuthNaverService {
     return data;
   }
 
-  private async getNaverUserProfile({
-    accessToken,
-  }: GetNaverUserProfileRequestDto) {
-    const { data } = await axios<GetNaverUserProfileResponseDto>({
+  private async getNaverUserProfile({ accessToken }: GetNaverUserInfoRequestDto) {
+    const { data } = await axios<GetNaverUserInfoResponseDto>({
       url: 'https://openapi.naver.com/v1/nid/me',
       method: 'GET',
       headers: {

@@ -1,8 +1,8 @@
-import type { GetKakaoUserProfileRequestDto } from '../../kakao/dtos/get-kakao-user-profile.dto';
+import type { GetKakaoUserInfoRequestDto } from '../../kakao/dtos/get-kakao-user-info.dto';
 
-export type GetNaverUserProfileRequestDto = GetKakaoUserProfileRequestDto;
+export type GetNaverUserInfoRequestDto = GetKakaoUserInfoRequestDto;
 
-export interface GetNaverUserProfileResponseDto {
+export interface GetNaverUserInfoResponseDto {
   resultcode: string;
   message: string;
   response: NaverUserInfo;
