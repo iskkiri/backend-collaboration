@@ -8,14 +8,12 @@ export const appConfig = registerAs('app', () => ({
   naverClientId: process.env.NAVER_CLIENT_ID,
   naverClientSecret: process.env.NAVER_CLIENT_SECRET,
   googleApplicationCredentials: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+  appleClientId: process.env.APPLE_CLIENT_ID,
 }));
 
 export const configModuleOptions: ConfigModuleOptions = {
   isGlobal: true,
-  envFilePath:
-    process.env.NODE_ENV === 'development'
-      ? '.env.development'
-      : '.env.production',
+  envFilePath: process.env.NODE_ENV === 'development' ? '.env.development' : '.env.production',
   validationSchema: Joi.object({
     PORT: Joi.number().required(),
 
@@ -26,6 +24,8 @@ export const configModuleOptions: ConfigModuleOptions = {
     NAVER_CLIENT_SECRET: Joi.string().required(),
 
     GOOGLE_APPLICATION_CREDENTIALS: Joi.string().required(),
+
+    APPLE_CLIENT_ID: Joi.string().required(),
   }),
   load: [appConfig],
 };

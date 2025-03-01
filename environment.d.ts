@@ -7,5 +7,6 @@ namespace NodeJS {
     NAVER_CLIENT_ID: string;
     NAVER_CLIENT_SECRET: string;
     GOOGLE_APPLICATION_CREDENTIALS: string;
+    APPLE_CLIENT_ID: string;
   }
 }
