@@ -7,15 +7,21 @@ import { AppleTokenPayload } from './types/apple-token-payload.types';
 import { ConfigType } from '@nestjs/config';
 import { appConfig } from '@/common/options/config.options';
 import { GetAppleIdentityTokenRequestDto } from './dtos/get-apple-identity-token.dto';
-import { isRSAKey } from './types/json-web-key.types';
+import { isRSAKey } from '../_types/json-web-key.types';
 
 @Injectable()
 export class OAuthAppleService {
+  private applePublicKeys: ApplePublicKey[] = [];
+  private keysExpirationTime = 0;
+
   constructor(
     @Inject(appConfig.KEY)
     private config: ConfigType<typeof appConfig>
   ) {}
 
+  /**
+   * 애플 로그인 (OpenID Connect)
+   */
   async appleLogin({ identityToken, nonce }: GetAppleIdentityTokenRequestDto) {
     // identityToken 검증
     const payload = await this.verifyIdentityToken({ identityToken, nonce });
@@ -52,13 +58,15 @@ export class OAuthAppleService {
     const header = JSON.parse(headerJSON);
 
     // 2. 애플 공개키 조회
-    const keys = await this.getApplePublicKeys();
-
     // 3. 토큰 헤더의 kid와 일치하는 키 찾기
-    const key = keys.find((k) => k.kid === header.kid);
+    let key = await this.findApplePublicKey(header.kid);
+
+    // 키를 찾지 못한 경우, 캐시를 무효화하고 새로운 키 조회 시도
     if (!key) {
-      throw new UnauthorizedException('Invalid token key ID');
+      this.invalidateKeyCache();
+      key = await this.findApplePublicKey(header.kid);
     }
+
     if (!isRSAKey(key)) {
       throw new UnauthorizedException('Invalid token key type');
     }
@@ -83,18 +91,55 @@ export class OAuthAppleService {
   }
 
   /**
-   * 애플 공개키 조회
+   * 애플 공개키 조회 (캐싱 포함)
    */
   private async getApplePublicKeys(): Promise<ApplePublicKey[]> {
+    const currentTime = Math.floor(Date.now() / 1000);
+
+    // 캐싱된 키가 있고 만료되지 않았다면 재사용
+    if (this.applePublicKeys.length > 0 && currentTime < this.keysExpirationTime) {
+      return this.applePublicKeys;
+    }
+
+    // 애플 공개키 엔드포인트에서 키 조회
     try {
-      const { data } = await axios.get<GetApplePublicKeysResponseDto>(
+      const response = await axios.get<GetApplePublicKeysResponseDto>(
         'https://appleid.apple.com/auth/keys'
       );
 
-      return data.keys;
+      const cacheMaxAge = 60 * 60; // 1시간
+
+      this.keysExpirationTime = currentTime + cacheMaxAge;
+      this.applePublicKeys = response.data.keys;
+
+      return this.applePublicKeys;
     } catch (error) {
       console.error('Error fetching Apple public keys:', error);
       throw new UnauthorizedException('Failed to fetch Apple public keys');
     }
+  }
+
+  /**
+   * 애플 공개 키 목록에서 토큰 헤더의 kid와 일치하는 키 찾기
+   */
+  private async findApplePublicKey(kid: string): Promise<ApplePublicKey> {
+    // 애플 공개키 조회
+    const keys = await this.getApplePublicKeys();
+    // 토큰 헤더의 kid와 일치하는 키 찾기
+    const key = keys.find((k) => k.kid === kid);
+
+    if (!key) {
+      throw new UnauthorizedException('Invalid token key ID');
+    }
+
+    return key;
+  }
+
+  /**
+   * 캐싱된 키 무효화
+   */
+  private invalidateKeyCache() {
+    this.applePublicKeys = [];
+    this.keysExpirationTime = 0;
   }
 }

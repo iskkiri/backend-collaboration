@@ -1,8 +1,8 @@
-export interface GetKakaoUserProfileRequestDto {
+export interface GetKakaoUserInfoRequestDto {
   accessToken: string;
 }
 
-export interface GetKakaoUserProfileResponseDto {
+export interface GetKakaoUserInfoResponseDto {
   id: number;
   connected_at: Date;
   properties: KakaoProperty;

@@ -11,8 +11,11 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
-  await app.listen(PORT, () =>
-    logger.log(`${PORT}번 포트에서 서버 실행 중  ✅ `)
-  );
+  app.enableCors({
+    origin: ['http://localhost:3000'],
+    credentials: true,
+  });
+
+  await app.listen(PORT, () => logger.log(`${PORT}번 포트에서 서버 실행 중  ✅ `));
 }
 bootstrap();
