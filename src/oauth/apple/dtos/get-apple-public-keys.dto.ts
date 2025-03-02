@@ -1,8 +1,8 @@
-export interface GetApplePublicKeysResponseDto {
+export class GetApplePublicKeysResponseDto {
   keys: ApplePublicKey[];
 }
 
-export interface ApplePublicKey {
+export class ApplePublicKey {
   kty: string;
   kid: string;
   use: string;

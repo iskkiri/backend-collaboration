@@ -1,8 +1,8 @@
-export interface GetKakaoPublicKeyResponseDto {
+export class GetKakaoPublicKeyResponseDto {
   keys: KakaoPublicKey[];
 }
 
-export interface KakaoPublicKey {
+export class KakaoPublicKey {
   kid: string;
   kty: string;
   alg: string;

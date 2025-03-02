@@ -29,6 +29,12 @@ importers:
       axios:
         specifier: ^1.7.9
         version: 1.7.9
+      class-transformer:
+        specifier: ^0.5.1
+        version: 0.5.1
+      class-validator:
+        specifier: ^0.14.1
+        version: 0.14.1
       firebase-admin:
         specifier: ^13.1.0
         version: 13.1.0
@@ -4569,8 +4575,7 @@ snapshots:
   '@types/tough-cookie@4.0.5':
     optional: true
 
-  '@types/validator@13.12.2':
-    optional: true
+  '@types/validator@13.12.2': {}
 
   '@types/yargs-parser@21.0.3': {}
 
@@ -5057,15 +5062,13 @@ snapshots:
 
   cjs-module-lexer@1.4.1: {}
 
-  class-transformer@0.5.1:
-    optional: true
+  class-transformer@0.5.1: {}
 
   class-validator@0.14.1:
     dependencies:
       '@types/validator': 13.12.2
       libphonenumber-js: 1.11.18
       validator: 13.12.0
-    optional: true
 
   cli-cursor@3.1.0:
     dependencies:
@@ -6483,8 +6486,7 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
-  libphonenumber-js@1.11.18:
-    optional: true
+  libphonenumber-js@1.11.18: {}
 
   limiter@1.1.5: {}
 
@@ -7363,8 +7365,7 @@ snapshots:
       '@types/istanbul-lib-coverage': 2.0.6
       convert-source-map: 2.0.0
 
-  validator@13.12.0:
-    optional: true
+  validator@13.12.0: {}
 
   vary@1.1.2: {}
 

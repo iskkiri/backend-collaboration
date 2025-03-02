@@ -45,7 +45,6 @@ async function bootstrap() {
       .setTitle('Backend API')
       .setDescription('Backend API 문서')
       .setVersion('1.0')
-      .addTag('Backend')
       .addBearerAuth()
       .build();
     const document = SwaggerModule.createDocument(app, config);

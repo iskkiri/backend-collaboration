@@ -9,6 +9,7 @@ import type {
 import type {
   GetNaverUserInfoRequestDto,
   GetNaverUserInfoResponseDto,
+  NaverUserInfo,
 } from './dtos/get-naver-user-info.dto';
 
 @Injectable()
@@ -21,7 +22,7 @@ export class OAuthNaverService {
   /**
    * 네이버 로그인 (Authorization Code Flow)
    */
-  async naverLogin({ code, state }: GetNaverAuthTokenRequestDto) {
+  async naverLogin({ code, state }: GetNaverAuthTokenRequestDto): Promise<NaverUserInfo> {
     const { access_token } = await this.getNaverAuthToken({
       code,
       state,
@@ -55,7 +56,9 @@ export class OAuthNaverService {
   /**
    * 네이버 사용자 정보 가져오기
    */
-  private async getNaverUserProfile({ accessToken }: GetNaverUserInfoRequestDto) {
+  private async getNaverUserProfile({
+    accessToken,
+  }: GetNaverUserInfoRequestDto): Promise<NaverUserInfo> {
     const { data } = await axios<GetNaverUserInfoResponseDto>({
       url: 'https://openapi.naver.com/v1/nid/me',
       method: 'GET',
@@ -65,6 +68,6 @@ export class OAuthNaverService {
       },
     });
     console.log(data);
-    return data;
+    return data.response;
   }
 }
