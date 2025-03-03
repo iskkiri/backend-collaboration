@@ -1,7 +1,5 @@
-import axios from 'axios';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { appConfig } from '@/common/options/config.options';
-import type { ConfigType } from '@nestjs/config';
+import { AppConfig, appConfig } from '@/common/options/config.options';
 import type {
   GetKakaoAuthTokenRequestDto,
   GetKakaoAuthTokenResponseDto,
@@ -16,6 +14,7 @@ import { isRSAKey } from '../_types/json-web-key.types';
 import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
 import { KakaoTokenPayload } from './types/kakao-token-payload.types';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class OAuthKakaoService {
@@ -24,7 +23,8 @@ export class OAuthKakaoService {
 
   constructor(
     @Inject(appConfig.KEY)
-    private config: ConfigType<typeof appConfig>
+    private readonly config: AppConfig,
+    private readonly httpService: HttpService
   ) {}
 
   /**
@@ -66,7 +66,7 @@ export class OAuthKakaoService {
    * 카카오 인증 토큰 가져오기
    */
   private async getKakaoAuthToken({ code, redirectUri }: GetKakaoAuthTokenRequestDto) {
-    const { data } = await axios<GetKakaoAuthTokenResponseDto>({
+    const { data } = await this.httpService.axiosRef<GetKakaoAuthTokenResponseDto>({
       url: 'https://kauth.kakao.com/oauth/token',
       method: 'POST',
       data: {
@@ -87,7 +87,7 @@ export class OAuthKakaoService {
    * 카카오 사용자 정보 가져오기
    */
   private async getKakaoUserInfo({ accessToken }: GetKakaoUserInfoRequestDto) {
-    const { data } = await axios<GetKakaoUserInfoResponseDto>({
+    const { data } = await this.httpService.axiosRef<GetKakaoUserInfoResponseDto>({
       url: 'https://kapi.kakao.com/v2/user/me',
       method: 'POST',
       data: {
@@ -164,7 +164,7 @@ export class OAuthKakaoService {
 
     // 카카오 공개키 엔드포인트에서 키 조회
     try {
-      const response = await axios.get<GetKakaoPublicKeyResponseDto>(
+      const response = await this.httpService.axiosRef.get<GetKakaoPublicKeyResponseDto>(
         'https://kauth.kakao.com/.well-known/jwks.json'
       );
 

@@ -13,6 +13,7 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*');
+    // https://docs.nestjs.com/migration-guide#express-v5
+    consumer.apply(LoggerMiddleware).forRoutes('{*splat}');
   }
 }

@@ -1,7 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import axios from 'axios';
-import { appConfig } from '@/common/options/config.options';
-import type { ConfigType } from '@nestjs/config';
+import { AppConfig, appConfig } from '@/common/options/config.options';
 import type {
   GetNaverAuthTokenRequestDto,
   GetNaverAuthTokenResponseDto,
@@ -11,12 +9,14 @@ import type {
   GetNaverUserInfoResponseDto,
   NaverUserInfo,
 } from './dtos/get-naver-user-info.dto';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class OAuthNaverService {
   constructor(
     @Inject(appConfig.KEY)
-    private config: ConfigType<typeof appConfig>
+    private readonly config: AppConfig,
+    private readonly httpService: HttpService
   ) {}
 
   /**
@@ -39,7 +39,7 @@ export class OAuthNaverService {
    * 네이버 인증 토큰 가져오기
    */
   private async getNaverAuthToken({ code, state }: GetNaverAuthTokenRequestDto) {
-    const { data } = await axios<GetNaverAuthTokenResponseDto>({
+    const { data } = await this.httpService.axiosRef<GetNaverAuthTokenResponseDto>({
       url: 'https://nid.naver.com/oauth2.0/token',
       method: 'GET',
       params: {
@@ -59,7 +59,7 @@ export class OAuthNaverService {
   private async getNaverUserProfile({
     accessToken,
   }: GetNaverUserInfoRequestDto): Promise<NaverUserInfo> {
-    const { data } = await axios<GetNaverUserInfoResponseDto>({
+    const { data } = await this.httpService.axiosRef<GetNaverUserInfoResponseDto>({
       url: 'https://openapi.naver.com/v1/nid/me',
       method: 'GET',
       headers: {

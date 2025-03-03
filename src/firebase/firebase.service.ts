@@ -1,6 +1,5 @@
-import { appConfig } from '@/common/options/config.options';
+import { AppConfig, appConfig } from '@/common/options/config.options';
 import { Inject, Injectable } from '@nestjs/common';
-import type { ConfigType } from '@nestjs/config';
 import { credential } from 'firebase-admin';
 import { initializeApp, type App } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
@@ -12,12 +11,10 @@ export class FirebaseService {
 
   constructor(
     @Inject(appConfig.KEY)
-    private config: ConfigType<typeof appConfig>
+    private readonly config: AppConfig
   ) {
     this.firebaseAdmin = initializeApp({
-      credential: credential.cert(
-        JSON.parse(this.config.googleApplicationCredentials)
-      ),
+      credential: credential.cert(JSON.parse(this.config.googleApplicationCredentials)),
     });
   }
 

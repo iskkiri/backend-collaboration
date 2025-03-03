@@ -1,13 +1,12 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ApplePublicKey, GetApplePublicKeysResponseDto } from './dtos/get-apple-public-keys.dto';
-import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
 import { AppleTokenPayload } from './types/apple-token-payload.types';
-import { ConfigType } from '@nestjs/config';
-import { appConfig } from '@/common/options/config.options';
+import { AppConfig, appConfig } from '@/common/options/config.options';
 import { GetAppleIdentityTokenRequestDto } from './dtos/get-apple-identity-token.dto';
 import { isRSAKey } from '../_types/json-web-key.types';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class OAuthAppleService {
@@ -16,7 +15,8 @@ export class OAuthAppleService {
 
   constructor(
     @Inject(appConfig.KEY)
-    private config: ConfigType<typeof appConfig>
+    private readonly config: AppConfig,
+    private readonly httpService: HttpService
   ) {}
 
   /**
@@ -103,7 +103,7 @@ export class OAuthAppleService {
 
     // 애플 공개키 엔드포인트에서 키 조회
     try {
-      const response = await axios.get<GetApplePublicKeysResponseDto>(
+      const response = await this.httpService.axiosRef.get<GetApplePublicKeysResponseDto>(
         'https://appleid.apple.com/auth/keys'
       );
 
