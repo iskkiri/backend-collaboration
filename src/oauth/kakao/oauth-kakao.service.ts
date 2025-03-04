@@ -11,10 +11,10 @@ import type {
 import { GetKakaoIdentityTokenRequestDto } from './dtos/get-kakao-identity-token.dto';
 import { GetKakaoPublicKeyResponseDto, KakaoPublicKey } from './dtos/get-kakao-public-keys.dto';
 import { isRSAKey } from '../_types/json-web-key.types';
-import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
 import { KakaoTokenPayload } from './types/kakao-token-payload.types';
 import { HttpService } from '@nestjs/axios';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class OAuthKakaoService {
@@ -24,7 +24,8 @@ export class OAuthKakaoService {
   constructor(
     @Inject(appConfig.KEY)
     private readonly config: AppConfig,
-    private readonly httpService: HttpService
+    private readonly httpService: HttpService,
+    private readonly jwtService: JwtService
   ) {}
 
   /**
@@ -136,7 +137,8 @@ export class OAuthKakaoService {
 
     // 5. 토큰 검증
     try {
-      const decodedToken = jwt.verify(idToken, publicKey, {
+      const decodedToken = this.jwtService.verify(idToken, {
+        secret: publicKey,
         algorithms: ['RS256'],
         issuer: 'https://kauth.kakao.com',
         audience: this.config.kakaoClientId,

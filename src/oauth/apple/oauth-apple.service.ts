@@ -1,12 +1,12 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ApplePublicKey, GetApplePublicKeysResponseDto } from './dtos/get-apple-public-keys.dto';
-import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
 import { AppleTokenPayload } from './types/apple-token-payload.types';
 import { AppConfig, appConfig } from '@/common/options/config.options';
 import { GetAppleIdentityTokenRequestDto } from './dtos/get-apple-identity-token.dto';
 import { isRSAKey } from '../_types/json-web-key.types';
 import { HttpService } from '@nestjs/axios';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class OAuthAppleService {
@@ -16,7 +16,8 @@ export class OAuthAppleService {
   constructor(
     @Inject(appConfig.KEY)
     private readonly config: AppConfig,
-    private readonly httpService: HttpService
+    private readonly httpService: HttpService,
+    private readonly jwtService: JwtService
   ) {}
 
   /**
@@ -76,10 +77,11 @@ export class OAuthAppleService {
 
     // 5. 토큰 검증
     try {
-      const decodedToken = jwt.verify(identityToken, publicKey, {
-        algorithms: ['RS256'], // 애플은 RS256 알고리즘 사용
+      const decodedToken = this.jwtService.verify(identityToken, {
+        secret: publicKey,
+        algorithms: ['RS256'],
         issuer: 'https://appleid.apple.com',
-        audience: this.config.appleClientId, // 애플 개발자 포털에 등록된 앱 ID
+        audience: this.config.appleClientId,
         nonce,
       }) as AppleTokenPayload;
 

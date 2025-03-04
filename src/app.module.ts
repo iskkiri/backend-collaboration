@@ -5,9 +5,16 @@ import { FirebaseModule } from './firebase/firebase.module';
 import { FcmModule } from './firebase/fcm/fcm.module';
 import { OAuthModule } from './oauth/oauth.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [ConfigModule.forRoot(configModuleOptions), OAuthModule, FirebaseModule, FcmModule],
+  imports: [
+    ConfigModule.forRoot(configModuleOptions),
+    JwtModule.register({ global: true }),
+    OAuthModule,
+    FirebaseModule,
+    FcmModule,
+  ],
   controllers: [],
   providers: [],
 })
