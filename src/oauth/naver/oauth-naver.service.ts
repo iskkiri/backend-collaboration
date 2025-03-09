@@ -28,11 +28,11 @@ export class OAuthNaverService {
       state,
     });
 
-    const userProfile = await this.getNaverUserProfile({
+    const userInfo = await this.getNaverUserInfo({
       accessToken: access_token,
     });
 
-    return userProfile;
+    return userInfo;
   }
 
   /**
@@ -56,7 +56,7 @@ export class OAuthNaverService {
   /**
    * 네이버 사용자 정보 가져오기
    */
-  private async getNaverUserProfile({
+  private async getNaverUserInfo({
     accessToken,
   }: GetNaverUserInfoRequestDto): Promise<NaverUserInfo> {
     const { data } = await this.httpService.axiosRef<GetNaverUserInfoResponseDto>({
