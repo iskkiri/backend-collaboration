@@ -21,6 +21,10 @@ export const appConfig = registerAs('app', () => ({
 
   // 애플 로그인
   appleClientId: process.env.APPLE_CLIENT_ID,
+
+  // 페이코 로그인
+  paycoClientId: process.env.PAYCO_CLIENT_ID,
+  paycoClientSecret: process.env.PAYCO_CLIENT_SECRET,
 }));
 export type AppConfig = ConfigType<typeof appConfig>;
 
@@ -47,6 +51,10 @@ export const configModuleOptions = {
 
     // 애플 로그인
     APPLE_CLIENT_ID: z.string().min(1),
+
+    // 페이코 로그인
+    PAYCO_CLIENT_ID: z.string().min(1),
+    PAYCO_CLIENT_SECRET: z.string().min(1),
   }).parse,
   load: [appConfig],
 } satisfies ConfigModuleOptions;

@@ -12,6 +12,9 @@ import { AppleTokenPayload } from './apple/types/apple-token-payload.types';
 import { GetGoogleAuthTokenRequestDto } from './google/dtos/get-google-auth-token.dto';
 import { GoogleUserInfo } from './google/dtos/get-google-user-info.dto';
 import { OAuthGoogleService } from './google/oauth-google.service';
+import { GetPaycoAuthTokenRequestDto } from './payco/dtos/get-payco-auth-token.dto';
+import { OAuthPaycoService } from './payco/oauth-payco.service';
+import { PaycoUserInfo } from './payco/dtos/get-payco-user-info.dto';
 
 @ApiTags('OAuth')
 @Controller('oauth')
@@ -20,7 +23,8 @@ export class OauthController {
     private readonly oauthKakaoService: OAuthKakaoService,
     private readonly oauthNaverService: OAuthNaverService,
     private readonly oauthGoogleService: OAuthGoogleService,
-    private readonly oauthAppleService: OAuthAppleService
+    private readonly oauthAppleService: OAuthAppleService,
+    private readonly oauthPaycoService: OAuthPaycoService
   ) {}
 
   @ApiOperation({ summary: '카카오 로그인' })
@@ -53,5 +57,13 @@ export class OauthController {
   @Post('apple')
   appleLogin(@Body() body: GetAppleIdentityTokenRequestDto): Promise<AppleTokenPayload> {
     return this.oauthAppleService.appleLogin(body);
+  }
+
+  @ApiOperation({ summary: '페이코 로그인' })
+  @ApiOkResponse({ type: PaycoUserInfo })
+  @HttpCode(HttpStatus.OK)
+  @Post('payco')
+  paycoLogin(@Body() body: GetPaycoAuthTokenRequestDto): Promise<PaycoUserInfo> {
+    return this.oauthPaycoService.paycoLogin(body);
   }
 }
