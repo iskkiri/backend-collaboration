@@ -32,6 +32,12 @@ export class VerifyIdentityResponseDto implements IdentityVerificationVerifiedCu
   @ApiProperty({
     example: 'SKT',
     description:
+      `\`SKT\`: SKT <br />` +
+      `\`KT\`: KT <br />` +
+      `\`LGU\`: LGU <br />` +
+      `\`SKT_MVNO\`: SKT MVNO <br />` +
+      `\`KT_MVNO\`: KT MVNO <br />` +
+      `\`LGU_MVNO\`: LGU MVNO <br />` +
       '통신사<br />' +
       //
       '다날: 별도 계약이 필요합니다.<br />' +

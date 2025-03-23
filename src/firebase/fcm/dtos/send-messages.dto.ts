@@ -8,8 +8,8 @@ export class SendMessagesRequestDto {
       'cqTV7md4gkyWmI8JnAy_rD:APA91bEe9xLBrb_6dhAVGvCbBMgepOLzRo9fq7NhUFhskfXPUAa1aYLD8HXrJC4J7Z0lDGO1vftArngP1n6FCiiN_IAES1tDqWz1vi7L61qyD4RXgjOFlwQ',
       'dqTV8md4gkyWmI8JnAy_rE:BPA91bEe9xLBrb_6dhAVGvCbBMgepOLzRo9fq7NhUFhskfXPUAa1aYLD8HXrJC4J7Z0lDGO1vftArngP1n6FCiiN_IAES1tDqWz1vi7L61qyD4RXgjOFlwR',
     ],
+    type: String,
     isArray: true,
-    type: [String],
   })
   @ArrayNotEmpty()
   @IsArray()

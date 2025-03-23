@@ -15,6 +15,7 @@ import { OAuthGoogleService } from './google/oauth-google.service';
 import { GetPaycoAuthTokenRequestDto } from './payco/dtos/get-payco-auth-token.dto';
 import { OAuthPaycoService } from './payco/oauth-payco.service';
 import { PaycoUserInfo } from './payco/dtos/get-payco-user-info.dto';
+import { ApiPropertiesDescription } from '@/common/decorators/api-properties-description.decorator';
 
 @ApiTags('OAuth')
 @Controller('oauth')
@@ -28,6 +29,7 @@ export class OauthController {
   ) {}
 
   @ApiOperation({ summary: '카카오 로그인' })
+  @ApiPropertiesDescription({ dto: GetKakaoAuthTokenRequestDto })
   @ApiOkResponse({ type: GetKakaoUserInfoResponseDto })
   @HttpCode(HttpStatus.OK)
   @Post('kakao')
@@ -36,6 +38,7 @@ export class OauthController {
   }
 
   @ApiOperation({ summary: '네이버 로그인' })
+  @ApiPropertiesDescription({ dto: GetNaverAuthTokenRequestDto })
   @ApiOkResponse({ type: NaverUserInfo })
   @HttpCode(HttpStatus.OK)
   @Post('naver')
@@ -44,6 +47,7 @@ export class OauthController {
   }
 
   @ApiOperation({ summary: '구글 로그인' })
+  @ApiPropertiesDescription({ dto: GetGoogleAuthTokenRequestDto })
   @ApiOkResponse({ type: GoogleUserInfo })
   @HttpCode(HttpStatus.OK)
   @Post('google')
@@ -52,6 +56,7 @@ export class OauthController {
   }
 
   @ApiOperation({ summary: '애플 로그인' })
+  @ApiPropertiesDescription({ dto: GetAppleIdentityTokenRequestDto })
   @ApiOkResponse({ type: AppleTokenPayload })
   @HttpCode(HttpStatus.OK)
   @Post('apple')
@@ -60,6 +65,7 @@ export class OauthController {
   }
 
   @ApiOperation({ summary: '페이코 로그인' })
+  @ApiPropertiesDescription({ dto: GetPaycoAuthTokenRequestDto })
   @ApiOkResponse({ type: PaycoUserInfo })
   @HttpCode(HttpStatus.OK)
   @Post('payco')
